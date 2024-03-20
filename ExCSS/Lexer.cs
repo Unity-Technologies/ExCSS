@@ -469,16 +469,8 @@ namespace ExCSS
                         {
                             return DataBlock(_stylesheetReader.Next);
                         }
+                        current = _stylesheetReader.Previous;
                         break;
-                    case Specification.Solidus:
-                        {
-                            if (_stylesheetReader.Previous == Specification.Asterisk)
-                            {
-                                return DataBlock(_stylesheetReader.Next);
-                            }
-                            current = _stylesheetReader.Next;
-                            break;
-                        }
                     case Specification.EndOfFile:
 
                         ErrorHandler(ParserError.EndOfFile, ErrorMessages.ExpectedCommentEnd);

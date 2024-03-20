@@ -465,7 +465,7 @@ namespace ExCSS.Tests
         [Test]
         public void Parser_Reads_Any_Comments_Without_Errors()
         {
-            var validComments = new[] {"/*/", "/**/", "/***/", "/****/", "/* anything */", "/* // */", "/*// */"};
+            var validComments = new[] { "/**/", "/***/", "/****/", "/* anything */", "/* // */", "/*// */"};
             var parser = new Parser();
 
             foreach (var comment in validComments)

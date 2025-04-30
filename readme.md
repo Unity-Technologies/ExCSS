@@ -35,3 +35,15 @@ found in [the W3 CSS 3 Release Candidate documentation](http://www.w3.org/TR/200
 
 
 
+
+## To correctly build the project and run the tests
+- Use visual studio 2022
+- Install NUnit3TestAdapter:
+    - Tools/NuGet Package Manager/Pacakge Manager Console
+    - Execute the following command: **NuGet\Install-Package NUnit3TestAdapter -Version 3.17.0**
+- Build the ExCSS.Unity.VS2010 project (right-click on the project, build)
+- Build the EXCSs.Unity.Tests project (right-click on the project, build)
+- Open the Test Explorer: View / Test Explorer (from the menu).
+- Run all the tests by clicking on the play which has the tooltip "Run All Tests In View".
+
+

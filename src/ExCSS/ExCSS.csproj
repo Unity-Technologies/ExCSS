@@ -20,7 +20,7 @@
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-		<SignAssembly>true</SignAssembly>
+		<SignAssembly>False</SignAssembly>
 		<AssemblyOriginatorKeyFile>ExCSS.snk</AssemblyOriginatorKeyFile>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<IncludeSymbols>true</IncludeSymbols>
@@ -44,7 +44,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Properties\" />
 		<None Include="..\..\readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	

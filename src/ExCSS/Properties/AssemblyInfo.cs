@@ -17,4 +17,9 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1e338799-960e-44f6-9111-65dce1381bb4")]
+
+// TODO: Figure out which one is correct. 
+[assembly: InternalsVisibleTo("UnityEditor")]
+[assembly: InternalsVisibleTo("UnityEngine")]
+[assembly: InternalsVisibleTo("UnityEngine.CoreModule")]
+[assembly: InternalsVisibleTo("UnityEngine")]

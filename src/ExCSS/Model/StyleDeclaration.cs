@@ -211,9 +211,9 @@ namespace ExCSS
             return Declarations.FirstOrDefault(m => m.Name.Isi(name));
         }
 
-        internal void SetProperty(Property property)
+        internal void SetProperty(Property property, bool expandProperty = true)
         {
-            if (property is ShorthandProperty shorthand)
+            if (property is ShorthandProperty shorthand && expandProperty)
             {
                 SetShorthand(shorthand);
             }

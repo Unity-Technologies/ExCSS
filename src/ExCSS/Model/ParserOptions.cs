@@ -9,5 +9,10 @@
         public bool AllowInvalidConstraints { get; set; }
         public bool PreserveComments { get; set; }
         public bool PreserveDuplicateProperties { get; set; }
+
+        /// <summary>
+        /// Added by Unity. We want to preserve short hand properties. (Karl)
+        /// </summary>
+        public bool ExpandShorthandProperties { get; set; }
     }
 }

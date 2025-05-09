@@ -625,7 +625,7 @@ namespace ExCSS
                         // and determine which one takes priority over the other.
                         // Example 1: "margin-left: 5px !important; text-align:center; margin: 3px;";
                         // Example 2: "margin: 5px !important; text-align:center; margin-left: 3px;";
-                        if (sourceProperty is ShorthandProperty shorthandProperty)
+                        if (sourceProperty is ShorthandProperty shorthandProperty && _parser.Options.ExpandShorthandProperties)
                         {
                             resolvedProperties = PropertyFactory.Instance.CreateLonghandsFor(shorthandProperty.Name);
                             shorthandProperty.Export(resolvedProperties);
@@ -652,7 +652,7 @@ namespace ExCSS
 
                             if (shouldSetProperty)
                             {
-                                style.SetProperty(resolvedProperty);
+                                style.SetProperty(resolvedProperty, _parser.Options.ExpandShorthandProperties);
                                 finalProperties[resolvedProperty.Name] = resolvedProperty;
                             }
                         }

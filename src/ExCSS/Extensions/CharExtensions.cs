@@ -82,7 +82,8 @@
 
         public static bool IsNameStart(this char c)
         {
-            return c.IsNonAscii() || c.IsUppercaseAscii() || c.IsLowercaseAscii() || c == Symbols.Underscore;
+            // Unity: Added support for names that start with "--".
+            return c.IsNonAscii() || c.IsUppercaseAscii() || c.IsLowercaseAscii() || c == Symbols.Underscore || c == Symbols.Minus;
         }
 
         public static bool IsLineBreak(this char c)

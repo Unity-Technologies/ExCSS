@@ -24,7 +24,7 @@ namespace ExCSS
 
         #region Selectors
 
-        private static readonly Dictionary<string, ISelector> Selectors =
+        internal static readonly Dictionary<string, ISelector> Selectors =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
                     PseudoClassNames.Root,

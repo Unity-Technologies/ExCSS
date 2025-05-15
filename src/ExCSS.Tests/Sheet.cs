@@ -162,7 +162,7 @@ h1 {
         public void CssSheetOnEofDuringAtMediaRuleWithinString()
         {
             var sheet = ParseStyleSheet(@"  @media screen {
-    p:before { content: 'Hello");
+    p::before { content: 'Hello");
             Assert.Equal(1, sheet.Rules.Length);
             Assert.IsType<MediaRule>(sheet.Rules[0]);
             var media = sheet.Rules[0] as MediaRule;
@@ -1280,6 +1280,14 @@ h1 {
             Assert.Equal(2, parts.Count());
             Assert.IsType<IdSelector>(parts[0].Selector);
             Assert.IsType<IdSelector>(parts[1].Selector);
+        }
+
+        [Fact]
+        public void Karl()
+        {
+            var sheet = ParseStyleSheet(@"VisualElement:idontexist { margin-right:-100px; }", true, true, true, true, true, false, true, false);
+            var rule = sheet.StyleRules.First();
+            var selector = rule.Selector;
         }
     }
 }

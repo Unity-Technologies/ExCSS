@@ -22,6 +22,8 @@ namespace ExCSS
                 }
             );
 
+        private readonly StylesheetParser _parser;
+
         #region Selectors
 
         internal static readonly Dictionary<string, ISelector> Selectors =
@@ -66,11 +68,19 @@ namespace ExCSS
 
         #endregion
 
+        internal PseudoClassSelectorFactory(StylesheetParser parser = null)
+        {
+            _parser = parser;
+        }
+
         internal static PseudoClassSelectorFactory Instance => Lazy.Value;
 
         public ISelector Create(string name)
         {
-            return Selectors.TryGetValue(name, out var selector) ? selector : null;
+            // Unity: Added support for AllowInvalidSelectors
+            return Selectors.TryGetValue(name, out var selector) ? selector :
+                ((_parser?.Options.AllowInvalidSelectors ?? false) ?
+                PseudoClassSelector.Create(name) : null);
         }
     }
 }

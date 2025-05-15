@@ -99,7 +99,7 @@ namespace ExCSS
         internal SelectorConstructor GetSelectorCreator()
         {
             var attributeSelector = AttributeSelectorFactory.Instance;
-            var pseudoClassSelector = PseudoClassSelectorFactory.Instance;
+            var pseudoClassSelector = new PseudoClassSelectorFactory(this);
             var pseudoElementSelector = new PseudoElementSelectorFactory(this);
             return Pool.NewSelectorConstructor(attributeSelector, pseudoClassSelector, pseudoElementSelector);
         }

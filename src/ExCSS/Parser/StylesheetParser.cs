@@ -12,6 +12,8 @@ namespace ExCSS
     {
         internal static readonly StylesheetParser Default = new();
 
+        public EventHandler<TokenizerError> ErrorHandler;
+
         public StylesheetParser(
             bool includeUnknownRules = false,
             bool includeUnknownDeclarations = false,
@@ -20,7 +22,8 @@ namespace ExCSS
             bool tolerateInvalidConstraints = false,
             bool preserveComments = false,
             bool preserveDuplicateProperties = false,
-            bool expandShorthandProperties = true
+            bool expandShorthandProperties = true,
+            EventHandler<TokenizerError> errorHandler = null
         )
         {
             Options = new ParserOptions
@@ -34,6 +37,7 @@ namespace ExCSS
                 PreserveDuplicateProperties = preserveDuplicateProperties,
                 ExpandShorthandProperties = expandShorthandProperties,
             };
+            ErrorHandler = errorHandler;
         }
 
         internal ParserOptions Options { get; }
@@ -99,7 +103,7 @@ namespace ExCSS
         internal SelectorConstructor GetSelectorCreator()
         {
             var attributeSelector = AttributeSelectorFactory.Instance;
-            var pseudoClassSelector = new PseudoClassSelectorFactory(this);
+            var pseudoClassSelector = Options.AllowInvalidSelectors ? new PseudoClassSelectorFactory(this) : PseudoClassSelectorFactory.Instance;
             var pseudoElementSelector = new PseudoElementSelectorFactory(this);
             return Pool.NewSelectorConstructor(attributeSelector, pseudoClassSelector, pseudoElementSelector);
         }
@@ -108,6 +112,7 @@ namespace ExCSS
         {
             var sheet = new Stylesheet(this);
             var tokenizer = new Lexer(source);
+            tokenizer.Error += ErrorHandler;
             var start = tokenizer.GetCurrentPosition();
             var builder = new StylesheetComposer(tokenizer, this);
             var end = builder.CreateRules(sheet);
@@ -120,6 +125,7 @@ namespace ExCSS
         {
             await source.PrefetchAllAsync(CancellationToken.None).ConfigureAwait(false);
             var tokenizer = new Lexer(source);
+            tokenizer.Error += ErrorHandler;
             var start = tokenizer.GetCurrentPosition();
             var builder = new StylesheetComposer(tokenizer, this);
             //var tasks = new List<Task>();

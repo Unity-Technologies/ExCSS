@@ -31,6 +31,15 @@ namespace ExCSS
             handler.Invoke(this, errorEvent);
         }
 
+        internal void RaiseErrorOccurred(ParseError error, string message, TextPosition position)
+        {
+            var handler = Error;
+            if (handler == null) return;
+
+            var errorEvent = new TokenizerError(error, position) { Message = message };
+            handler.Invoke(this, errorEvent);
+        }
+
         private Token Data(char current)
         {
             _position = GetCurrentPosition();
@@ -320,6 +329,17 @@ namespace ExCSS
             var current = GetNext();
             if (current.IsNameStart())
             {
+                // Unity custom
+                if (current == Symbols.Minus)
+                {
+                    var next = GetNext();
+                    GetPrevious();
+                    if (!next.IsLetter() && next != Symbols.Underscore)
+                    {
+                        RaiseErrorOccurred(ParseError.InvalidSelector, "Expected a letter or an underscore after the first hyphen.", GetCurrentPosition());
+                    }
+                }
+
                 StringBuffer.Append(current);
                 return HashRest();
             }

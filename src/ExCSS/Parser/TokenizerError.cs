@@ -12,6 +12,6 @@
 
         public TextPosition Position { get; }
         public int Code => _code.GetCode();
-        public string Message => "An unknown error occurred.";
+        public string Message { get; set; } = "An unknown error occurred.";
     }
 }

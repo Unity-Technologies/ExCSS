@@ -6,6 +6,7 @@ namespace ExCSS.Tests
     using Xunit;
     using System.IO;
     using System.Linq;
+    using System.Collections.Generic;
 
     public class CssSheetTests : CssConstructionFunctions
     {
@@ -1283,11 +1284,63 @@ h1 {
         }
 
         [Fact]
-        public void Karl()
+        public void Parser_Reads_Id_Hyphen_Elements()
         {
-            var sheet = ParseStyleSheet(@"VisualElement:idontexist { margin-right:-100px; }", true, true, true, true, true, false, true, false);
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) =>
+            {
+                errors.Add(error);
+            });
+
+            var sheet = parser.Parse("E#-id{}");
             var rule = sheet.StyleRules.First();
-            var selector = rule.Selector;
+            Assert.Equal("E#-id", rule.SelectorText);
+            Assert.Empty(errors);
+        }
+
+        [Fact]
+        public void Parser_Reads_Id_Multiple_Hyphen_Elements()
+        {
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) =>
+            {
+                errors.Add(error);
+            });
+
+            var sheet = parser.Parse("E#--id{}");
+            var rule = sheet.StyleRules.First();
+            Assert.Equal("E#--id", rule.SelectorText);
+            Assert.Single(errors);
+        }
+
+        [Fact]
+        public void Parser_Reads_Id_Valid_Hyphen_Elements()
+        {
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) =>
+            {
+                errors.Add(error);
+            });
+
+            var sheet = parser.Parse("E#-_id{}");
+            var rule = sheet.StyleRules.First();
+            Assert.Equal("E#-_id", rule.SelectorText);
+            Assert.Empty(errors);
+        }
+
+        [Fact]
+        public void Parser_Reads_Id_Missing_Elements()
+        {
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) =>
+            {
+                errors.Add(error);
+            });
+
+            var sheet = parser.Parse("E#-{}");
+            var rule = sheet.StyleRules.First();
+            Assert.Equal("E#-", rule.SelectorText);
+            Assert.Single(errors);
         }
     }
 }

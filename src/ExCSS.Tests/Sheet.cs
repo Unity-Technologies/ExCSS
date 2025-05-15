@@ -1284,6 +1284,22 @@ h1 {
         }
 
         [Fact]
+        public void Parser_Reads_Id_Digit_Elements()
+        {
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) =>
+            {
+                errors.Add(error);
+            });
+
+            var sheet = parser.Parse("#2Plus1Container { }");
+            var rule = sheet.StyleRules.First();
+            Assert.IsType<IdSelector>(rule.Selector);
+            Assert.Equal("#2Plus1Container", rule.SelectorText);
+            Assert.Empty(errors);
+        }
+
+        [Fact]
         public void Parser_Reads_Id_Hyphen_Elements()
         {
             var errors = new List<TokenizerError>();

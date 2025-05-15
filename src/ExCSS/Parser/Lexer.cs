@@ -327,7 +327,9 @@ namespace ExCSS
         private Token HashStart()
         {
             var current = GetNext();
-            if (current.IsNameStart())
+
+            // Unity Handle Id selectors which start with a digit ("#2Plus1Container"), this is invalid css but we support it.
+            if (current.IsNameStart() || current.IsDigit())
             {
                 // Unity custom
                 if (current == Symbols.Minus)

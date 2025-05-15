@@ -42,7 +42,7 @@ namespace ExCSS
 
         internal ParserOptions Options { get; }
 
-        public Stylesheet Parse(string content)
+        public virtual Stylesheet Parse(string content)
         {
             var source = new TextSource(content);
             return Parse(source);

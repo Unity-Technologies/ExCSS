@@ -1342,5 +1342,22 @@ h1 {
             Assert.Equal("E#-", rule.SelectorText);
             Assert.Single(errors);
         }
+
+        [Fact]
+        public void Parser_Does_Not_Throw_On_Empty_Document()
+        {
+            ParseStyleSheet("");
+        }
+
+        [Theory]
+        [InlineData("\n")]
+        [InlineData("\r\n")]
+        [InlineData("\r")]
+        public void Parser_Reads_Correct_Line_Numbers_With_Line_Breaks(string lineEnding)
+        {
+            var sheet = ParseStyleSheet(string.Format("{0}html{{color:#000000;}}{0}{0}div{{color:#ffffff;}}{0}{0}", lineEnding));
+            Assert.Equal(2, sheet.StyleRules.First().Selector.StylesheetText.Range.Start.Line);
+            Assert.Equal(4, sheet.StyleRules.ElementAt(1).Selector.StylesheetText.Range.Start.Line);
+        }
     }
 }

@@ -30,5 +30,9 @@ var image = rule.Style.BackgroundImage; // url('/images/logo.png')
 The project has a growing suite of tests.  Currently the tests account for and pass all CSS Level 3 selector definitions
 found in [the W3 CSS 3 Release Candidate documentation](http://www.w3.org/TR/2001/CR-css3-selectors-20011113/)
 
-
-
+## To correctly build the project and run the tests
+- Use visual studio 2022
+- Build the ExCSS project (right-click on the project, build)
+- Build the EXCSs.Tests project (right-click on the project, build)
+- Open the Test Explorer: View / Test Explorer (from the menu).
+- Run all the tests by clicking on the play which has the tooltip "Run All Tests In View".

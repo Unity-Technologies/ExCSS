@@ -10,4 +10,5 @@ artifacts:
             - builds/**
 
 commands:
+    - choco install dotnet
     - build.bat

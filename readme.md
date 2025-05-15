@@ -36,3 +36,7 @@ found in [the W3 CSS 3 Release Candidate documentation](http://www.w3.org/TR/200
 - Build the EXCSs.Tests project (right-click on the project, build)
 - Open the Test Explorer: View / Test Explorer (from the menu).
 - Run all the tests by clicking on the play which has the tooltip "Run All Tests In View".
+
+## Building an update for Unity
+- Build on yamato here https://unity-ci.cds.internal.unity3d.com/project/966?nav=branches
+- Copy build.zip to External/ExCSS

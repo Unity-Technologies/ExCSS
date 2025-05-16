@@ -11,9 +11,8 @@ artifacts:
 
 commands:
     - gsudo.exe choco install dotnet-8.0-sdk -y 
-    - call refreshenv
-    - dotnet build "ExCSS.sln" -c Release
-    - dotnet test "ExCSS.sln" -c Release
+    - gsudo.exe dotnet build "ExCSS.sln" -c Release
+    - gsudo.exe dotnet test "ExCSS.sln" -c Release
     - mkdir .\builds\lib\netstandard2.0 
     - del .\src\ExCSS\bin\Release\netstandard2.0\ExCSS.Unity.deps.json
     - copy .\src\ExCSS\bin\Release\netstandard2.0\*.* .\builds\lib\netstandard2.0

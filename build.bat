@@ -1,8 +1,8 @@
 @ECHO OFF
 
-dotnet build "C:\Unity\Packages\ExCSS\ExCSS.sln" -c Release
+dotnet build "ExCSS.sln" -c Release
 if ERRORLEVEL 1 exit 1
-dotnet test "C:\Unity\Packages\ExCSS\ExCSS.sln" -c Release
+dotnet test "ExCSS.sln" -c Release
 if ERRORLEVEL 1 exit 1
 
 ECHO.
@@ -16,7 +16,7 @@ ECHO [Remove old builds.zip]
 del /Q .\builds.zip
 
 ECHO [Make .\builds\lib\netstandard2.0 dir]
-mkdir .\builds\lib\net35
+mkdir .\builds\lib\netstandard2.0 
 if ERRORLEVEL 1 exit 1
 
 ECHO [Copy files to .\builds\lib\netstandard2.0 dir]

@@ -11,6 +11,7 @@ artifacts:
 
 commands:
     - gsudo.exe choco install dotnet-8.0-sdk -y 
+    - call refreshenv
     - gsudo.exe dotnet build "ExCSS.sln" -c Release
     - gsudo.exe dotnet test "ExCSS.sln" -c Release
     - mkdir .\builds\lib\netstandard2.0 

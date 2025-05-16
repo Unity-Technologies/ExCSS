@@ -10,5 +10,5 @@ artifacts:
             - builds/**
 
 commands:
-    - choco install dotnet
+    - gsudo.exe choco install dotnet-8.0-sdk -y 
     - build.bat

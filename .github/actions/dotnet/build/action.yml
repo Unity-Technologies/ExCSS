@@ -1,12 +1,6 @@
 name: build
 description: 'Restore and build the dotnet solution'
 
-inputs:
-  dotnet-build-configuration:
-    default: Release
-    description: 'Defines the build configuration. The default for most projects is Release.'
-    required: true
-
 runs:
   using: "composite"
   steps:
@@ -16,4 +10,23 @@ runs:
 
     - name: Build solutions
       shell: bash
-      run: dotnet build --no-restore --configuration ${{ inputs.dotnet-build-configuration }}
+      run: dotnet build --no-restore -c release
+
+    - name: Zip build
+      shell: bash
+      run: |
+        # Create the directories
+        mkdir -p ./artifacts/builds/lib/netstandard2.0
+
+        # Copy the built files
+        cp ./src/ExCSS/bin/Release/netstandard2.0/ExCSS.Unity.dll ./artifacts/builds/lib/netstandard2.0/
+        cp ./src/ExCSS/bin/Release/netstandard2.0/ExCSS.Unity.pdb ./artifacts/builds/lib/netstandard2.0/
+
+        # Change directory to artifacts
+        cd ./artifacts
+
+    - name: Upload build
+      uses: actions/upload-artifact@v4
+      with:
+        name: build
+        path: ./artifacts

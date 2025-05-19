@@ -38,5 +38,6 @@ found in [the W3 CSS 3 Release Candidate documentation](http://www.w3.org/TR/200
 - Run all the tests by clicking on the play which has the tooltip "Run All Tests In View".
 
 ## Building an update for Unity
-- Build on yamato here https://unity-ci.cds.internal.unity3d.com/project/966?nav=branches
+- Run the github action - Click "Run workflow" on the build workflow: https://github.com/Unity-Technologies/ExCSS/actions/workflows/build.yml
+- Once complete download the build.zip that is part of the Artifacts.
 - Copy build.zip to External/ExCSS

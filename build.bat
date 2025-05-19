@@ -1,29 +1,8 @@
 @ECHO OFF
 
-ECHO.
-ECHO ==[Restoring packages]==
-ECHO.
-set nuGetDir=%~dp0.nuget
-call "%nuGetDir%\nuget.exe" restore "%~dp0ExCSS.Unity.sln"
+dotnet build "ExCSS.sln" -c Release
 if ERRORLEVEL 1 exit 1
-
-ECHO.
-ECHO ==[Building library]==
-ECHO.
-set msBuildDir=%WINDIR%\Microsoft.NET\Framework\v4.0.30319
-call "%msBuildDir%\msbuild.exe" ExCSS.Unity.sln  /p:Configuration=Release /l:FileLogger,Microsoft.Build.Engine;logfile=Manual_MSBuild_ReleaseVersion_LOG.log
-if ERRORLEVEL 1 exit 1
-
-ECHO.
-ECHO ==[Run Debug unit tests]==
-ECHO.
-call .\nunit-console\nunit3-console.exe .\ExCSS.Tests\bin\DebugUnity35\ExCSS.Tests.dll
-if ERRORLEVEL 1 exit 1
-
-ECHO.
-ECHO ==[Run Release unit tests]==
-ECHO.
-call .\nunit-console\nunit3-console.exe .\ExCSS.Tests\bin\ReleaseUnity35\ExCSS.Tests.dll
+dotnet test "ExCSS.sln" -c Release
 if ERRORLEVEL 1 exit 1
 
 ECHO.
@@ -36,10 +15,11 @@ if ERRORLEVEL 1 exit 1
 ECHO [Remove old builds.zip]
 del /Q .\builds.zip
 
-ECHO [Make .\builds\lib\net35 dir]
-mkdir .\builds\lib\net35
+ECHO [Make .\builds\lib\netstandard2.0 dir]
+mkdir .\builds\lib\netstandard2.0 
 if ERRORLEVEL 1 exit 1
 
-ECHO [Copy files to .\builds\lib\net35 dir]
-copy .\ExCSS\bin\ReleaseUnity35\*.* .\builds\lib\net35
+ECHO [Copy files to .\builds\lib\netstandard2.0 dir]
+del .\src\ExCSS\bin\Release\netstandard2.0\ExCSS.Unity.deps.json
+copy .\src\ExCSS\bin\Release\netstandard2.0\*.* .\builds\lib\netstandard2.0
 if ERRORLEVEL 1 exit 1

@@ -21,3 +21,10 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("UnityEditor")]
 [assembly: InternalsVisibleTo("UnityEditor.CoreModule")]
 [assembly: InternalsVisibleTo("UnityEditor.UIBuilderModule")]
+// Runtime UXML/USS import (UI-5178): the new runtime engine module needs ExCSS internals (token
+// types, parser internals) to run the USS parse path in the Player. Two grants: "UnityEngine" for
+// monolithic runtime builds where the module's code is merged into UnityEngine.dll (mirrors the
+// existing "UnityEditor" grant for the monolithic editor), and the per-module assembly name for
+// non-monolithic / stripped player builds where it ships as its own assembly.
+[assembly: InternalsVisibleTo("UnityEngine")]
+[assembly: InternalsVisibleTo("UnityEngine.UIElementsAssetImporterModule")]

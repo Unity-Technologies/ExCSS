@@ -1,6 +1,6 @@
 ﻿namespace ExCSS
 {
-    internal sealed class KeywordToken : Token
+    public sealed class KeywordToken : Token
     {
         public KeywordToken(TokenType type, string data, TextPosition position)
             : base(type, data, position)

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ExCSS
 {
-    internal sealed class FunctionToken : Token, IEnumerable<Token>
+    public sealed class FunctionToken : Token, IEnumerable<Token>
     {
         private readonly List<Token> _arguments;
 

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ExCSS
 {
-    internal sealed class NumberToken : Token
+    public sealed class NumberToken : Token
     {
         private static readonly char[] FloatIndicators = {'.', 'e', 'E'};
 

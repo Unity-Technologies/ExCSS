@@ -2,7 +2,7 @@
 
 namespace ExCSS
 {
-    internal sealed class UnitToken : Token
+    public sealed class UnitToken : Token
     {
         public UnitToken(TokenType type, string value, string dimension, TextPosition position)
             : base(type, value, position)

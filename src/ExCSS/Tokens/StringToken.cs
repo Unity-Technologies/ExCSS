@@ -1,6 +1,6 @@
 ﻿namespace ExCSS
 {
-    internal sealed class StringToken : Token
+    public sealed class StringToken : Token
     {
         public StringToken(string data, bool valid, char quote, TextPosition position)
             : base(TokenType.String, data, position)

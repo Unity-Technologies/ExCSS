@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ExCSS
 {
-    internal static class ValueExtensions
+    public static class ValueExtensions
     {
         private static bool IsWeight(int value)
         {

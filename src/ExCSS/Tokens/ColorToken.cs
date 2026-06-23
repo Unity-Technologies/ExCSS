@@ -1,6 +1,6 @@
 ﻿namespace ExCSS
 {
-    internal sealed class ColorToken : Token
+    public sealed class ColorToken : Token
     {
         public ColorToken(string data, TextPosition position)
             : base(TokenType.Color, data, position)

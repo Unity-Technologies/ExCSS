@@ -126,5 +126,35 @@ namespace ExCSS.Tests
             Assert.StartsWith(":is(.card)", nested.SelectorText);
             Assert.Contains("a&b", nested.SelectorText);
         }
+
+        [Theory]
+        [InlineData("#foo { bar:calc(2px * 2); }", "calc", 1, 12)]
+        [InlineData("#foo { margin-top:20em; }", "20", 1, 19)]
+        [InlineData("#foo { color: red; width:10fr; }", "10", 1, 26)]
+        [InlineData("#foo { color: var(shiny-color) }", "var", 1, 15)]
+        [InlineData("#a { margin: 1px\n 2px; }\n#b { width: 3em; }", "3", 3, 13)]
+        [InlineData("#a { margin: 1px\r\n 2px; }\r\n#b { width: 3em; }", "3", 3, 13)]
+        public void DeclarationTokenPositionsSurviveNestedRuleLookAhead(string source, string data, int line, int column)
+        {
+            var sheet = ParseStyleSheet(source, includeUnknownDeclarations: true, tolerateInvalidValues: true);
+            var token = sheet.StyleRules
+                .Cast<StyleRule>()
+                .SelectMany(r => r.Style.Declarations)
+                .SelectMany(d => d.DeclaredValue.Original)
+                .First(t => t.Data == data);
+
+            Assert.Equal(line, token.Position.Line);
+            Assert.Equal(column, token.Position.Column);
+        }
+
+        [Fact]
+        public void RulePositionAfterMultiLineDeclarationIsCorrect()
+        {
+            var sheet = ParseStyleSheet("#a { margin: 1px\n 2px; }\n#b { width: 3em; }");
+            var second = sheet.StyleRules.Cast<StyleRule>().Last();
+
+            Assert.Equal(3, second.StylesheetText.Range.Start.Line);
+            Assert.Equal(1, second.StylesheetText.Range.Start.Column);
+        }
     }
 }

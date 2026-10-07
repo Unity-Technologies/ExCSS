@@ -43,19 +43,29 @@ namespace ExCSS
         }
 
         /// <summary>
-        /// Repositions the lexer so the next token is re-lexed from character index
-        /// <paramref name="sourceIndex"/> (a raw <see cref="Source"/> index, as returned by
-        /// <see cref="InsertionPoint"/>). Unlike setting <see cref="InsertionPoint"/> (whose
-        /// <c>BackNative</c> loop is not a faithful inverse across <c>\r\n</c> normalization), this
-        /// restores the character stream exactly — line/column tracking is not rewound (it only affects
-        /// reported positions, never token content). Used by <see cref="StylesheetComposer"/> to rewind a
-        /// CSS-Nesting classification look-ahead so a declaration re-lexes cleanly in value mode.
+        /// Captures the lexer position (source index, line, column and current character) so
+        /// <see cref="RewindTo"/> can restore it exactly.
         /// </summary>
-        public void RewindTo(int sourceIndex)
+        public LexerState SaveState()
         {
-            Source.Index = sourceIndex;
-            // Non-EOF so the next Advance() actually reads Source[sourceIndex] rather than short-circuiting.
-            Current = Symbols.Null;
+            return new LexerState(Source.Index, Line, Column, Current, _columns.Count);
+        }
+
+        /// <summary>
+        /// Repositions the lexer to a state captured by <see cref="SaveState"/> so the next token is
+        /// re-lexed from there. Unlike setting <see cref="InsertionPoint"/> (whose <c>BackNative</c> loop
+        /// is not a faithful inverse across <c>\r\n</c> normalization), this restores the character
+        /// stream and the line/column tracking exactly. Used by <see cref="StylesheetComposer"/> to rewind
+        /// a CSS-Nesting classification look-ahead so a declaration re-lexes cleanly in value mode.
+        /// </summary>
+        public void RewindTo(LexerState state)
+        {
+            Source.Index = state.SourceIndex;
+            Line = state.Line;
+            Column = state.Column;
+            Current = state.Current;
+            while (_columns.Count > state.ColumnDepth)
+                _columns.Pop();
         }
 
         protected char SkipSpaces()
@@ -165,6 +175,24 @@ namespace ExCSS
         public ushort Column { get; private set; }
         public int Position => Source.Index;
         protected char Current { get; private set; }
+
+        public readonly struct LexerState
+        {
+            public LexerState(int sourceIndex, ushort line, ushort column, char current, int columnDepth)
+            {
+                SourceIndex = sourceIndex;
+                Line = line;
+                Column = column;
+                Current = current;
+                ColumnDepth = columnDepth;
+            }
+
+            public int SourceIndex { get; }
+            public ushort Line { get; }
+            public ushort Column { get; }
+            public char Current { get; }
+            public int ColumnDepth { get; }
+        }
 
         public int InsertionPoint
         {

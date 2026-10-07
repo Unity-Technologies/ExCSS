@@ -15,6 +15,7 @@ namespace ExCSS
         // exact start without any position arithmetic (which is unreliable across \r\n normalization and
         // unicode escapes) and can slice the nested prelude's source text.
         private int _markBeforeLastToken;
+        private LexerBase.LexerState _stateBeforeLastToken;
 
         public StylesheetComposer(Lexer lexer, StylesheetParser parser)
         {
@@ -878,10 +879,10 @@ namespace ExCSS
                 name.StartsWith("--", StringComparison.Ordinal))
                 return false;
 
-            var rewindMark = _markBeforeLastToken;   // raw source index before `token` (the first token)
+            var rewindState = _stateBeforeLastToken; // lexer state before `token` (the first token)
             var depth = 0;
             var scan = token;
-            var scanStart = rewindMark;              // raw source index before `scan`
+            var scanStart = _markBeforeLastToken;    // raw source index before `scan`
 
             while (scan.Type != TokenType.EndOfFile)
             {
@@ -901,7 +902,7 @@ namespace ExCSS
                         return true;
                     case TokenType.CurlyBracketClose when depth == 0:
                     case TokenType.Semicolon when depth == 0:
-                        _lexer.RewindTo(rewindMark);
+                        _lexer.RewindTo(rewindState);
                         token = NextToken();
                         return false;
                 }
@@ -910,7 +911,7 @@ namespace ExCSS
                 scan = _lexer.Get();
             }
 
-            _lexer.RewindTo(rewindMark);
+            _lexer.RewindTo(rewindState);
             token = NextToken();
             return false;
         }
@@ -1198,6 +1199,7 @@ namespace ExCSS
         private Token NextToken()
         {
             _markBeforeLastToken = _lexer.InsertionPoint;
+            _stateBeforeLastToken = _lexer.SaveState();
             return _lexer.Get();
         }
 

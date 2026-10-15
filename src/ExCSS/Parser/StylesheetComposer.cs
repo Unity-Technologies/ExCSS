@@ -740,6 +740,8 @@ namespace ExCSS
 
             while (token.IsNot(TokenType.EndOfFile, TokenType.CurlyBracketClose))
             {
+                if (SkipBareSemicolon(ref token)) continue;
+
                 // @page selectors support declaration blocks in the form of at rules.  This 
                 // conditional accounts for the nested at with a page parent
                 //
@@ -1209,6 +1211,16 @@ namespace ExCSS
             return new StylesheetText(range, _lexer.Source);
         }
 
+        // CSS Syntax 3 "consume a block's contents" discards a bare <semicolon-token>.
+        private bool SkipBareSemicolon(ref Token token)
+        {
+            if (token.Type != TokenType.Semicolon) return false;
+
+            token = NextToken();
+            ParseComments(ref token);
+            return true;
+        }
+
         private void ParseComments(ref Token token)
         {
             var preserveComments = _parser.Options.PreserveComments;
@@ -1369,6 +1381,8 @@ namespace ExCSS
 
             while (token.IsNot(TokenType.EndOfFile, TokenType.CurlyBracketClose))
             {
+                if (SkipBareSemicolon(ref token)) continue;
+
                 var rule = CreateKeyframeRule(token);
                 token = NextToken();
                 ParseComments(ref token);
@@ -1385,6 +1399,8 @@ namespace ExCSS
 
             while (token.IsNot(TokenType.EndOfFile, TokenType.CurlyBracketClose))
             {
+                if (SkipBareSemicolon(ref token)) continue;
+
                 var property = CreateDeclarationWith(createProperty, ref token);
 
                 if (property is {HasValue: true})

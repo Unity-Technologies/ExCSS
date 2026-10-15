@@ -265,6 +265,66 @@ h1 {
         }
 
         [Fact]
+        public void CssSheetBareSemicolonsInDeclarationBlockAreDiscarded()
+        {
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) => { errors.Add(error); });
+            var sheet = parser.Parse(".a { color: red;; ; width: 1px; }");
+            Assert.Empty(errors);
+            Assert.Equal(1, sheet.Rules.Length);
+            var rule = (StyleRule)sheet.Rules[0];
+            Assert.Equal("rgb(255, 0, 0)", rule.Style.Color);
+            Assert.Equal("1px", rule.Style["width"]);
+        }
+
+        [Fact]
+        public void CssSheetLeadingBareSemicolonInDeclarationBlockIsDiscarded()
+        {
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) => { errors.Add(error); });
+            var sheet = parser.Parse(".a { ; color: red }");
+            Assert.Empty(errors);
+            var rule = (StyleRule)sheet.Rules[0];
+            Assert.Equal("rgb(255, 0, 0)", rule.Style.Color);
+        }
+
+        [Fact]
+        public void CssSheetBareSemicolonsInFontFaceDeclarationBlockAreDiscarded()
+        {
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) => { errors.Add(error); });
+            var sheet = parser.Parse("@font-face { ;; font-family: x; }");
+            Assert.Empty(errors);
+            var fontface = (IFontFaceRule)sheet.Rules[0];
+            Assert.Equal("x", fontface.Family);
+        }
+
+        [Fact]
+        public void CssSheetBareSemicolonBeforeNestedRuleIsDiscarded()
+        {
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) => { errors.Add(error); });
+            var sheet = parser.Parse(".a { color: red; ; .b { color: blue } }");
+            Assert.Empty(errors);
+            var rule = (StyleRule)sheet.Rules[0];
+            Assert.Equal("rgb(255, 0, 0)", rule.Style.Color);
+            var nested = Assert.Single(rule.NestedRules);
+            Assert.Equal(":is(.a) .b", nested.SelectorText);
+            Assert.Equal("rgb(0, 0, 255)", nested.Style.Color);
+        }
+
+        [Fact]
+        public void CssSheetBareSemicolonsInKeyframesBlockAreDiscarded()
+        {
+            var errors = new List<TokenizerError>();
+            var parser = new StylesheetParser(errorHandler: (sender, error) => { errors.Add(error); });
+            var sheet = parser.Parse("@keyframes spin { ; 0% { opacity: 0; } ;; 100% { opacity: 1; } }");
+            Assert.Empty(errors);
+            var keyframes = (IKeyframesRule)sheet.Rules[0];
+            Assert.Equal(2, keyframes.Rules.Length);
+        }
+
+        [Fact]
         public void CssSheetBareSemicolonInsideSupportsBlockIsDiscarded()
         {
             var sheet = ParseStyleSheet(@"@supports (color: red) { ; .a { color: red; } }");
